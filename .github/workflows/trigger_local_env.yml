@@ -3,7 +3,7 @@ name: Trigger Local Env
 on:
   pull_request:
     branches:
-      - test
+      - main
     types: [opened, synchronize, reopened]
 
 jobs:
