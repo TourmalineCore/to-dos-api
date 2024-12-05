@@ -1,9 +1,10 @@
 name: Trigger Local Env
 
 on:
-  push:
+  pull_request:
     branches:
       - test
+    types: [opened, synchronize, reopened]
 
 jobs:
   trigger:
