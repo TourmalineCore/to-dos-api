@@ -17,4 +17,4 @@ jobs:
           -H "Accept: application/vnd.github.everest-preview+json" \
           -H "Authorization: token $GITHUB_TOKEN" \
           https://api.github.com/repos/Yam1x/to-dos-local-env/dispatches \
-          -d '{"event_type": "trigger_from_API"}'
+          -d '{"event_type": "trigger_from_API"}' 
