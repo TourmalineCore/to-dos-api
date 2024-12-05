@@ -19,7 +19,7 @@ jobs:
           -H "Accept: application/vnd.github.everest-preview+json" \
           -H "Authorization: token $GITHUB_TOKEN" \
           https://api.github.com/repos/Yam1x/to-dos-local-env/dispatches \
-          -d '{"event_type": "trigger_from_API", "client_payload": {"branch": "${{ github.head_ref }}"}}'
+          -d '{"event_type": "trigger_from_API", "client_payload": {"branch": "${{ github.head_ref }}"}}' 
 
       - name: Wait for Local Env tests to pass
         run: |
