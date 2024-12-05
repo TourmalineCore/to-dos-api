@@ -1,9 +1,10 @@
 name: Trigger Local Env
 
 on:
-  push:
+  pull_request:
     branches:
-      - master
+      - test
+    types: [opened, synchronize, reopened]
 
 jobs:
   trigger:
@@ -13,8 +14,36 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
         run: |
+          echo "${{ github.head_ref }}"
           curl -X POST \
           -H "Accept: application/vnd.github.everest-preview+json" \
           -H "Authorization: token $GITHUB_TOKEN" \
           https://api.github.com/repos/Yam1x/to-dos-local-env/dispatches \
-          -d '{"event_type": "trigger_from_API"}' 
+          -d '{"event_type": "trigger_from_API", "client_payload": {"branch": "${{ github.head_ref }}"}}'
+
+      - name: Wait for Local Env tests to pass
+        run: |
+          sleep 20
+      
+          while true; do
+            STATUS=$(curl -s -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
+              https://api.github.com/repos/Yam1x/to-dos-local-env/actions/runs \
+              | jq '.workflow_runs | map(select(.event == "repository_dispatch" and .display_title == "trigger_from_API")) | .[0].status')
+      
+            if [ "$STATUS" == "\"completed\"" ]; then
+              CONCLUSION=$(curl -s -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" \
+                https://api.github.com/repos/Yam1x/to-dos-local-env/actions/runs \
+                | jq '.workflow_runs | map(select(.event == "repository_dispatch" and .display_title == "trigger_from_API")) | .[0].conclusion')
+      
+              if [ "$CONCLUSION" == "\"success\"" ]; then
+                echo "Tests passed"
+                exit 0
+              else
+                echo "Tests failed" 
+                exit 1
+              fi
+            else
+              echo "Waiting for test results..."
+              sleep 30
+            fi
+          done
