@@ -14,11 +14,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
         run: |
+          echo "${{ github.head_ref }}"
           curl -X POST \
           -H "Accept: application/vnd.github.everest-preview+json" \
           -H "Authorization: token $GITHUB_TOKEN" \
           https://api.github.com/repos/Yam1x/to-dos-local-env/dispatches \
-          -d '{"event_type": "trigger_from_API"}' 
+          -d '{"event_type": "trigger_from_API", "client_payload": {"branch": "${{ github.head_ref }}"}}'
 
       - name: Wait for Local Env tests to pass
         run: |
