@@ -8,7 +8,7 @@ on:
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - name: Send dispatch event
         env:
           GITHUB_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
