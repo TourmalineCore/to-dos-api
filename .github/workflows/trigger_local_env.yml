@@ -11,7 +11,7 @@ jobs:
     steps: 
       - name: Send dispatch event
         env:
-          GITHUB_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DISPATCH_TOKEN }} 
         run: |
           echo "${{ github.head_ref }}"
           curl -X POST \
