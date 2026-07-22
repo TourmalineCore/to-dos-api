@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Post, Query } from '@nestjs/common'
 import { ApiOkResponse, ApiProperty, ApiQuery } from '@nestjs/swagger'
 import { ToDosService } from './to-dos.service'
 
@@ -27,7 +27,7 @@ class NewToDoResponse {
   @ApiProperty({
     type: Number,
   })
-  newToDoId: number
+  todoId: number
 }
 
 class CompleteToDosRequest {
@@ -65,11 +65,12 @@ export class AppController {
     })
 
     return {
-      newToDoId,
+      todoId: newToDoId,
     }
   }
 
   @Post('complete')
+  @HttpCode(200)
   completeToDos(@Body() { toDoIds = [] }: CompleteToDosRequest) {
     toDoIds.forEach((toDoId) =>
       this.toDosService.completeToDo({
